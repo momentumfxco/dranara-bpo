@@ -1,11 +1,25 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { Heart } from "lucide-react";
+
 import { supabase } from "@/lib/supabase-consultorio";
 import { useAuth } from "@/lib/auth-context";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/auth")({
   component: AuthPage,
   ssr: false,
+  head: () => ({
+    meta: [
+      { title: "Acesso — Consultório Dra Nara" },
+      { name: "description", content: "Acesso seguro ao painel do consultório da Dra Nara." },
+      { property: "og:title", content: "Acesso — Consultório Dra Nara" },
+      { property: "og:description", content: "Acesso seguro ao painel do consultório da Dra Nara." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
 });
 
 function AuthPage() {
@@ -34,50 +48,92 @@ function AuthPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="w-full max-w-sm rounded-2xl bg-card p-8 shadow-card">
-        <div className="mb-6 text-center">
-          <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-glow text-primary-foreground font-bold">
-            N
-          </div>
-          <h1 className="text-lg font-semibold text-foreground">Consultório Dra Nara</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Acesse seu painel</p>
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background p-6">
+        {/* Soft ambient background shapes */}
+        <div className="pointer-events-none absolute inset-0 -z-10">
+          <div className="absolute -right-24 -top-24 h-96 w-96 rounded-full bg-primary/10 blur-3xl opacity-60" />
+          <div className="absolute -left-24 top-1/2 h-72 w-72 rounded-full bg-chart-4/10 blur-3xl opacity-80" />
         </div>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="mb-1.5 block text-xs font-medium text-foreground">E-mail</label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-              className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
-            />
+
+        <div className="w-full max-w-md">
+          <div className="rounded-3xl border border-border bg-card/80 p-8 shadow-card backdrop-blur-xl md:p-12">
+            <div className="mb-10 text-center">
+              <div className="mx-auto mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                <Heart className="h-8 w-8" strokeWidth={1.5} />
+              </div>
+              <h1 className="font-serif text-3xl font-semibold tracking-tight text-foreground">
+                Consultório Dra Nara
+              </h1>
+              <p className="mt-2 text-sm font-medium uppercase tracking-widest text-muted-foreground">
+                Psiquiatria & Bem-estar
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <label
+                  htmlFor="email"
+                  className="mb-1.5 ml-1 block text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+                >
+                  E-mail
+                </label>
+                <Input
+                  id="email"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
+                  placeholder="seu@email.com"
+                  className="h-auto rounded-xl border-border bg-background px-4 py-3.5 text-foreground placeholder:text-muted-foreground focus-visible:ring-primary"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="password"
+                  className="mb-1.5 ml-1 block text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+                >
+                  Senha
+                </label>
+                <Input
+                  id="password"
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                  placeholder="••••••••"
+                  className="h-auto rounded-xl border-border bg-background px-4 py-3.5 text-foreground placeholder:text-muted-foreground focus-visible:ring-primary"
+                />
+              </div>
+
+              {error && (
+                <p className="rounded-md bg-destructive/10 px-3 py-2 text-xs text-destructive">
+                  {error}
+                </p>
+              )}
+
+              <Button
+                type="submit"
+                disabled={loading}
+                className="h-auto w-full rounded-xl py-4 text-sm font-semibold shadow-lg shadow-primary/10 transition-all active:scale-[0.98]"
+              >
+                {loading ? "Entrando…" : "Acessar Painel"}
+              </Button>
+            </form>
+
+            <div className="mt-10 border-t border-border pt-8 text-center">
+              <p className="text-xs text-muted-foreground">
+                Acesso exclusivo para profissionais autorizados.
+              </p>
+            </div>
           </div>
-          <div>
-            <label className="mb-1.5 block text-xs font-medium text-foreground">Senha</label>
-            <input
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-              className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
-            />
-          </div>
-          {error && (
-            <p className="rounded-md bg-destructive/10 px-3 py-2 text-xs text-destructive">{error}</p>
-          )}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-lg bg-primary py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
-          >
-            {loading ? "Entrando…" : "Entrar"}
-          </button>
-        </form>
-      </div>
+
+          <p className="mt-8 text-center text-xs tracking-wide text-muted-foreground">
+            © {new Date().getFullYear()} Consultório Dra Nara. Todos os direitos reservados.
+          </p>
+        </div>
     </div>
   );
 }
