@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, HeadContent } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Heart } from "lucide-react";
 
