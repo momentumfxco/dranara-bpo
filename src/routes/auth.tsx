@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Heart } from "lucide-react";
+import { Smile } from "lucide-react";
 
 import { supabase } from "@/lib/supabase-consultorio";
 import { useAuth } from "@/lib/auth-context";
