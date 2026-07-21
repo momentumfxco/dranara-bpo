@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Heart } from "lucide-react";
+import { Smile } from "lucide-react";
 
 import { supabase } from "@/lib/supabase-consultorio";
 import { useAuth } from "@/lib/auth-context";
@@ -59,7 +59,7 @@ function AuthPage() {
           <div className="rounded-3xl border border-border bg-card/80 p-8 shadow-card backdrop-blur-xl md:p-12">
             <div className="mb-10 text-center">
               <div className="mx-auto mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                <Heart className="h-8 w-8" strokeWidth={1.5} />
+                <Smile className="h-8 w-8" strokeWidth={1.5} />
               </div>
               <h1 className="font-serif text-3xl font-semibold tracking-tight text-foreground">
                 Consultório Dra Nara
