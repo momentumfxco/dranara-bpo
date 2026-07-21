@@ -48,9 +48,7 @@ function AuthPage() {
   }
 
   return (
-    <>
-      <HeadContent />
-      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background p-6">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background p-6">
         {/* Soft ambient background shapes */}
         <div className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute -right-24 -top-24 h-96 w-96 rounded-full bg-primary/10 blur-3xl opacity-60" />
