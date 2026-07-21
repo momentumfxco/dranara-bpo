@@ -62,7 +62,7 @@ function AuthPage() {
                 <Smile className="h-8 w-8" strokeWidth={1.5} />
               </div>
               <h1 className="font-serif text-3xl font-semibold tracking-tight text-foreground">
-                Dra Nara - BPO Financeiro
+                Clínica Dra Nara
               </h1>
               <p className="mt-2 text-sm font-medium uppercase tracking-widest text-muted-foreground">
                 Dashboard Privado
