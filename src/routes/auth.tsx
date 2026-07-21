@@ -134,7 +134,6 @@ function AuthPage() {
             © {new Date().getFullYear()} Consultório Dra Nara. Todos os direitos reservados.
           </p>
         </div>
-      </div>
-    </>
+    </div>
   );
 }
