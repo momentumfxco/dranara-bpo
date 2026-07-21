@@ -62,10 +62,10 @@ function AuthPage() {
                 <Smile className="h-8 w-8" strokeWidth={1.5} />
               </div>
               <h1 className="font-serif text-3xl font-semibold tracking-tight text-foreground">
-                Consultório Dra Nara
+                Dra Nara - BPO Financeiro
               </h1>
               <p className="mt-2 text-sm font-medium uppercase tracking-widest text-muted-foreground">
-                Psiquiatria & Bem-estar
+                Dashboard Privado
               </p>
             </div>
 
@@ -125,7 +125,7 @@ function AuthPage() {
 
             <div className="mt-10 border-t border-border pt-8 text-center">
               <p className="text-xs text-muted-foreground">
-                Acesso exclusivo para profissionais autorizados.
+                Painel de uso interno — acesso restrito
               </p>
             </div>
           </div>
