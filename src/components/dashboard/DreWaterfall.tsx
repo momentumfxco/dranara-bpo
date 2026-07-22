@@ -71,7 +71,7 @@ export function DreWaterfall() {
                     {BRL2.format(r.value)}
                   </span>
                   <span className="text-right text-[11px] tabular-nums text-muted-foreground">
-                    {pctBruta.toFixed(1)}%
+                    {temReceita ? `${pctBruta.toFixed(1)}%` : "—"}
                   </span>
                 </div>
               );
