@@ -9,8 +9,9 @@ export function AlertaTaxaCartao() {
   const { data, isLoading } = useDreAtual();
   const receita = Number(data?.receita_bruta ?? 0);
   const taxa = Number(data?.taxas_cartao ?? 0);
-  const pct = receita > 0 ? (taxa / receita) * 100 : 0;
-  const alto = pct > TAXA_CARTAO_LIMITE_PCT;
+  const temReceita = receita > 0.01;
+  const pct = temReceita ? (taxa / receita) * 100 : 0;
+  const alto = temReceita && pct > TAXA_CARTAO_LIMITE_PCT;
 
   return (
     <Card className={alto ? "border border-destructive/40 bg-destructive/5" : ""}>
