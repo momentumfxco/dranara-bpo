@@ -84,6 +84,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:description", content: "Painel financeiro e operacional do consultório da Dra Nara." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Consultório Dra Nara — Dashboard" },
+      { name: "twitter:description", content: "Painel financeiro e operacional do consultório da Dra Nara." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/bf50e639-80a7-4d0d-8694-401f93fcbb33/id-preview-45aea892--617245c0-dd40-499b-8418-c2ae1175bb86.lovable.app-1784752478946.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/bf50e639-80a7-4d0d-8694-401f93fcbb33/id-preview-45aea892--617245c0-dd40-499b-8418-c2ae1175bb86.lovable.app-1784752478946.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
