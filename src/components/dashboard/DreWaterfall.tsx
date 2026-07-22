@@ -35,10 +35,11 @@ export function DreWaterfall() {
         <div className="space-y-1">
           {(() => {
             const rows = buildRows(data);
-            const bruta = Math.max(1, Number(data.receita_bruta));
+            const bruta = Number(data.receita_bruta);
+            const temReceita = Math.abs(bruta) > 0.01;
             const maxAbs = Math.max(...rows.map((r) => Math.abs(r.value)), 1);
             return rows.map((r) => {
-              const pctBruta = (r.value / bruta) * 100;
+              const pctBruta = temReceita ? (r.value / bruta) * 100 : 0;
               const width = (Math.abs(r.value) / maxAbs) * 100;
               const bg =
                 r.kind === "total"
@@ -70,7 +71,7 @@ export function DreWaterfall() {
                     {BRL2.format(r.value)}
                   </span>
                   <span className="text-right text-[11px] tabular-nums text-muted-foreground">
-                    {pctBruta.toFixed(1)}%
+                    {temReceita ? `${pctBruta.toFixed(1)}%` : "—"}
                   </span>
                 </div>
               );

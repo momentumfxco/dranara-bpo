@@ -9,8 +9,9 @@ export function AlertaTaxaCartao() {
   const { data, isLoading } = useDreAtual();
   const receita = Number(data?.receita_bruta ?? 0);
   const taxa = Number(data?.taxas_cartao ?? 0);
-  const pct = receita > 0 ? (taxa / receita) * 100 : 0;
-  const alto = pct > TAXA_CARTAO_LIMITE_PCT;
+  const temReceita = receita > 0.01;
+  const pct = temReceita ? (taxa / receita) * 100 : 0;
+  const alto = temReceita && pct > TAXA_CARTAO_LIMITE_PCT;
 
   return (
     <Card className={alto ? "border border-destructive/40 bg-destructive/5" : ""}>
@@ -31,7 +32,7 @@ export function AlertaTaxaCartao() {
             <span
               className={`text-3xl font-semibold tracking-tight ${alto ? "text-destructive" : "text-foreground"}`}
             >
-              {isLoading ? "—" : `${pct.toFixed(2)}%`}
+              {isLoading ? "—" : temReceita ? `${pct.toFixed(2)}%` : "—"}
             </span>
             <span className="text-xs text-muted-foreground">
               {BRL2.format(taxa)} de {BRL2.format(receita)}
@@ -40,7 +41,9 @@ export function AlertaTaxaCartao() {
           <p className={`mt-3 text-xs ${alto ? "text-destructive" : "text-muted-foreground"}`}>
             {alto
               ? "Acima do limite — revise contratos de maquininha."
-              : "Dentro do limite aceitável."}
+              : temReceita
+                ? "Dentro do limite aceitável."
+                : "Aguardando receita do mês para calcular a taxa."}
           </p>
         </div>
       </div>
