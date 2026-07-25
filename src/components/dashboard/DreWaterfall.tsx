@@ -21,15 +21,15 @@ function buildRows(d: DreAtual): Row[] {
   ];
 }
 
-export function DreWaterfall() {
-  const { data, isLoading } = useDreAtual();
+export function DreWaterfall({ mes }: { mes: string }) {
+  const { data, isLoading } = useDreMes(mes);
 
   return (
     <Card>
-      <CardHeader title="DRE do mês" subtitle="Estrutura de resultado — mês corrente" />
+      <CardHeader title="DRE do mês" subtitle={`Estrutura de resultado — ${formatMesLabel(mes)}`} />
       {isLoading || !data ? (
         <div className="flex h-72 items-center justify-center text-xs text-muted-foreground">
-          {isLoading ? "Carregando…" : "Sem dados de DRE."}
+          {isLoading ? "Carregando…" : "Sem dados de DRE ainda."}
         </div>
       ) : (
         <div className="space-y-1">
