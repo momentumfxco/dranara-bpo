@@ -1,6 +1,6 @@
 import { Card, CardHeader } from "./Card";
-import { BRL2 } from "@/lib/format";
-import { useDreAtual, type DreAtual } from "@/lib/dashboard-queries";
+import { BRL2, formatMesLabel } from "@/lib/format";
+import { useDreMes, type DreAtual } from "@/lib/dashboard-queries";
 
 type Row = { label: string; value: number; kind: "total" | "in" | "out" };
 
