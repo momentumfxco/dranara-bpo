@@ -8,10 +8,10 @@ import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/lib/supabase-consultorio";
 import {
   currentMonth,
-  useDreAtual,
+  useDreMes,
   useKpisMes,
 } from "@/lib/dashboard-queries";
-import { BRL, BRL2, variationPct } from "@/lib/format";
+import { BRL, BRL2, formatMesLabel, variationPct } from "@/lib/format";
 
 import { MonthPicker } from "@/components/dashboard/MonthPicker";
 import { KpiCard } from "@/components/dashboard/KpiCard";
@@ -47,7 +47,7 @@ function DashboardPage() {
   const mes = rawMes > currentMonth() ? currentMonth() : rawMes;
 
   const kpis = useKpisMes(mes);
-  const dre = useDreAtual();
+  const dre = useDreMes(mes);
 
   async function handleLogout() {
     await queryClient.cancelQueries();
@@ -127,7 +127,7 @@ function DashboardPage() {
           <KpiCard
             label="Margem de Lucro"
             value={margem === null ? "—" : `${margem.toFixed(1)}%`}
-            hint="Mês corrente (DRE)"
+            hint={`DRE — ${formatMesLabel(mes)}`}
           />
         </div>
 
@@ -139,14 +139,14 @@ function DashboardPage() {
 
         {/* Linha 3 */}
         <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <DreWaterfall />
+          <DreWaterfall mes={mes} />
           <ConsultaRetornoDonut mes={mes} />
         </div>
 
         {/* Linha 4 */}
         <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <RecebimentosDonut />
-          <AlertaTaxaCartao />
+          <RecebimentosDonut mes={mes} />
+          <AlertaTaxaCartao mes={mes} />
         </div>
 
         <footer className="mt-8 pb-6 text-center text-xs text-muted-foreground">

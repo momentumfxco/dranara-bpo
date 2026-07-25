@@ -1,12 +1,12 @@
 import { AlertTriangle, CheckCircle2 } from "lucide-react";
 import { Card } from "./Card";
-import { BRL2 } from "@/lib/format";
-import { useDreAtual } from "@/lib/dashboard-queries";
+import { BRL2, formatMesLabel } from "@/lib/format";
+import { useDreMes } from "@/lib/dashboard-queries";
 
 export const TAXA_CARTAO_LIMITE_PCT = 3;
 
-export function AlertaTaxaCartao() {
-  const { data, isLoading } = useDreAtual();
+export function AlertaTaxaCartao({ mes }: { mes: string }) {
+  const { data, isLoading } = useDreMes(mes);
   const taxa = Number(data?.taxas_cartao ?? 0);
   const vendaCartao = Number(data?.cartao_credito ?? 0) + Number(data?.cartao_debito ?? 0);
   const temVendaCartao = vendaCartao > 0.01;
@@ -26,7 +26,7 @@ export function AlertaTaxaCartao() {
         <div className="flex-1">
           <p className="text-sm font-semibold text-foreground">Taxa de cartão</p>
           <p className="mt-0.5 text-xs text-muted-foreground">
-            Limite alerta: {TAXA_CARTAO_LIMITE_PCT}% das vendas no cartão (mês corrente)
+            Limite alerta: {TAXA_CARTAO_LIMITE_PCT}% das vendas no cartão ({formatMesLabel(mes)})
           </p>
           <div className="mt-4 flex items-baseline gap-3">
             <span

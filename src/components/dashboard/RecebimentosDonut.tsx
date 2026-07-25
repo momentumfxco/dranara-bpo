@@ -1,7 +1,7 @@
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { Card, CardHeader } from "./Card";
-import { BRL2 } from "@/lib/format";
-import { useDreAtual } from "@/lib/dashboard-queries";
+import { BRL2, formatMesLabel } from "@/lib/format";
+import { useDreMes } from "@/lib/dashboard-queries";
 
 const COLORS = [
   "var(--color-chart-1)",
@@ -10,8 +10,8 @@ const COLORS = [
   "var(--color-chart-4)",
 ];
 
-export function RecebimentosDonut() {
-  const { data, isLoading } = useDreAtual();
+export function RecebimentosDonut({ mes }: { mes: string }) {
+  const { data, isLoading } = useDreMes(mes);
   const rows = data
     ? [
         { name: "Cartão Crédito", value: Number(data.cartao_credito) },
@@ -24,7 +24,7 @@ export function RecebimentosDonut() {
 
   return (
     <Card>
-      <CardHeader title="Receita por forma de recebimento" subtitle="Mês corrente (DRE)" />
+      <CardHeader title="Receita por forma de recebimento" subtitle={`DRE — ${formatMesLabel(mes)}`} />
       <div className="flex h-72 items-center gap-4">
         <div className="relative h-full w-1/2">
           {isLoading ? (
