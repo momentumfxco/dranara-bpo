@@ -26,7 +26,7 @@ export function AlertaTaxaCartao({ mes }: { mes: string }) {
         <div className="flex-1">
           <p className="text-sm font-semibold text-foreground">Taxa de cartão</p>
           <p className="mt-0.5 text-xs text-muted-foreground">
-            Limite alerta: {TAXA_CARTAO_LIMITE_PCT}% das vendas no cartão (mês corrente)
+            Limite alerta: {TAXA_CARTAO_LIMITE_PCT}% das vendas no cartão ({formatMesLabel(mes)})
           </p>
           <div className="mt-4 flex items-baseline gap-3">
             <span
