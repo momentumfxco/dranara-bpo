@@ -142,3 +142,30 @@ export function useDreAtual() {
     },
   });
 }
+
+// DRE do mês selecionado: usa dre_historico se o mês estiver fechado,
+// senão cai para dre_atual (snapshot ao vivo do mês corrente).
+export function useDreMes(mes: string) {
+  return useQuery({
+    queryKey: ["dre-mes", mes],
+    queryFn: async (): Promise<DreAtual | null> => {
+      const { data: hist, error: histErr } = await supabase
+        .from("dre_historico")
+        .select("*")
+        .eq("mes_referencia", monthStart(mes))
+        .maybeSingle();
+      if (histErr && histErr.code !== "PGRST116") {
+        // tabela ausente ou erro de leitura: segue para o fallback
+        console.warn("[dre_historico]", histErr.message);
+      }
+      if (hist) return hist as unknown as DreAtual;
+
+      if (mes === currentMonth()) {
+        const { data, error } = await supabase.from("dre_atual").select("*").eq("id", 1).maybeSingle();
+        if (error) throw error;
+        return (data as DreAtual) ?? null;
+      }
+      return null;
+    },
+  });
+}
