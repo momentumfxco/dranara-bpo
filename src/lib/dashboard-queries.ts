@@ -16,6 +16,9 @@ export function prevMonth(mes: string): string {
   const d = new Date(Date.UTC(y, m - 2, 1));
   return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
 }
+export function currentYear(): string {
+  return String(new Date().getFullYear());
+}
 export function currentMonth(): string {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
