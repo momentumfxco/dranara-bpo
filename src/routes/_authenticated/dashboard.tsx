@@ -14,6 +14,7 @@ import {
 import { BRL, BRL2, formatMesLabel, variationPct } from "@/lib/format";
 
 import { MonthPicker } from "@/components/dashboard/MonthPicker";
+import { YearPicker } from "@/components/dashboard/YearPicker";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { FluxoCaixaChart } from "@/components/dashboard/FluxoCaixaChart";
 import { AtendimentosDiaSemanaChart } from "@/components/dashboard/AtendimentosDiaSemanaChart";
