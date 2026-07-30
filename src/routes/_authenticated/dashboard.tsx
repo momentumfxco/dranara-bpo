@@ -96,10 +96,29 @@ function DashboardPage() {
               Indicadores financeiros e operacionais do consultório
             </p>
           </div>
-          <MonthPicker
-            value={mes}
-            onChange={(m) => navigate({ to: "/dashboard", search: { mes: m }, replace: true })}
-          />
+          <div className="flex items-center gap-2">
+            <MonthPicker
+              value={mes.slice(5, 7)}
+              ano={mes.slice(0, 4)}
+              onChange={(m) =>
+                navigate({
+                  to: "/dashboard",
+                  search: { mes: `${mes.slice(0, 4)}-${m}` },
+                  replace: true,
+                })
+              }
+            />
+            <YearPicker
+              value={mes.slice(0, 4)}
+              onChange={(a) =>
+                navigate({
+                  to: "/dashboard",
+                  search: { mes: `${a}-${mes.slice(5, 7)}` },
+                  replace: true,
+                })
+              }
+            />
+          </div>
         </div>
 
         {/* Linha 1 — KPIs */}
