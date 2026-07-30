@@ -172,3 +172,60 @@ export function useDreMes(mes: string) {
     },
   });
 }
+
+// DRE acumulada do ano: soma as linhas fechadas de dre_historico do ano
+// e, se for o ano corrente, adiciona o snapshot ao vivo de dre_atual
+// (quando o mês corrente ainda não tem linha fechada).
+export type DreAno = DreAtual & { mesesFechados: number; mesAtualIncluido: boolean };
+
+const DRE_CAMPOS = [
+  "cartao_credito", "cartao_debito", "pix", "boleto",
+  "receita_bruta", "taxas_cartao", "impostos", "receita_liquida",
+  "despesas_operacionais", "despesas_administrativas", "resultado_operacional",
+  "despesas_financeiras", "lucro_liquido", "retirada_lucro", "lucro_final",
+] as const;
+
+export function useDreAno(ano: string) {
+  return useQuery({
+    queryKey: ["dre-ano", ano],
+    queryFn: async (): Promise<DreAno | null> => {
+      const { data: hist, error } = await supabase
+        .from("dre_historico")
+        .select("*")
+        .gte("mes_referencia", `${ano}-01-01`)
+        .lte("mes_referencia", `${ano}-12-01`);
+      if (error) console.warn("[dre_historico ano]", error.message);
+
+      const linhas = (hist ?? []) as unknown as Array<DreAtual & { mes_referencia: string }>;
+      const mesesFechados = linhas.length;
+
+      let mesAtualIncluido = false;
+      let atual: DreAtual | null = null;
+      if (ano === currentYear()) {
+        const jaFechado = linhas.some((l) => String(l.mes_referencia).slice(0, 7) === currentMonth());
+        if (!jaFechado) {
+          const { data } = await supabase.from("dre_atual").select("*").eq("id", 1).maybeSingle();
+          if (data) {
+            atual = data as DreAtual;
+            mesAtualIncluido = true;
+          }
+        }
+      }
+
+      if (mesesFechados === 0 && !atual) return null;
+
+      const soma = {} as Record<(typeof DRE_CAMPOS)[number], number>;
+      for (const campo of DRE_CAMPOS) {
+        soma[campo] =
+          linhas.reduce((acc, l) => acc + Number(l[campo] ?? 0), 0) + Number(atual?.[campo] ?? 0);
+      }
+
+      return {
+        ...(soma as unknown as DreAtual),
+        atualizado_em: atual?.atualizado_em ?? "",
+        mesesFechados,
+        mesAtualIncluido,
+      };
+    },
+  });
+}
