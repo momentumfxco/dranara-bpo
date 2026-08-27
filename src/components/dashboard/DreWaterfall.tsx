@@ -9,28 +9,56 @@ type Row = { label: string; value: number; kind: "total" | "in" | "out" };
 function buildRows(d: DreAtual): Row[] {
   const n = (v: number | string) => Number(v);
   return [
-    { label: "Receita Bruta", value: n(d.receita_bruta), kind: "total" },
-    { label: "(−) Taxas de cartão", value: -n(d.taxas_cartao), kind: "out" },
+    // 1. Receita Bruta
+    { label: "Receitas de Cartão", value: n(d.receitas_cartao), kind: "in" },
+    { label: "Receitas de PIX", value: n(d.receitas_pix), kind: "in" },
+    { label: "Aporte Dra Nara", value: n(d.aporte_dra_nara), kind: "in" },
+    { label: "Total Receita Bruta", value: n(d.total_receita_bruta), kind: "total" },
+    // 2. Deduções da Receita
+    { label: "(−) Taxas de Cartão", value: -n(d.taxas_cartao), kind: "out" },
     { label: "(−) Impostos", value: -n(d.impostos), kind: "out" },
+    { label: "(−) Devoluções/Cancelamento", value: -n(d.devolucoes_cancelamento), kind: "out" },
+    { label: "(−) Outras Deduções", value: -n(d.outras_deducoes), kind: "out" },
+    // 3. Receita Líquida
     { label: "Receita Líquida", value: n(d.receita_liquida), kind: "total" },
-    { label: "(−) Desp. Operacionais", value: -n(d.despesas_operacionais), kind: "out" },
-    { label: "(−) Desp. Administrativas", value: -n(d.despesas_administrativas), kind: "out" },
-    { label: "Resultado Operacional", value: n(d.resultado_operacional), kind: "total" },
-    { label: "(−) Desp. Financeiras", value: -n(d.despesas_financeiras), kind: "out" },
-    { label: "Lucro Líquido", value: n(d.lucro_liquido), kind: "total" },
-    { label: "(−) Retirada de Lucro", value: -n(d.retirada_lucro), kind: "out" },
-    { label: "Lucro Final", value: n(d.lucro_final), kind: "total" },
+    // 4. Despesas Operacionais
+    { label: "(−) Uber", value: -n(d.uber), kind: "out" },
+    { label: "(−) Aluguel", value: -n(d.aluguel), kind: "out" },
+    { label: "(−) Gasolina", value: -n(d.gasolina), kind: "out" },
+    { label: "(−) Secretárias e IA", value: -n(d.secretarias_ia), kind: "out" },
+    { label: "(−) Outros Custos Operacionais", value: -n(d.outros_despesas_operacionais), kind: "out" },
+    { label: "Total Despesas Operacionais", value: -n(d.total_despesas_operacionais), kind: "total" },
+    // 5. Despesas Comerciais / Marketing
+    { label: "(−) Canva", value: -n(d.canva), kind: "out" },
+    { label: "(−) Google Ads", value: -n(d.google_ads), kind: "out" },
+    { label: "(−) Editor de Vídeo", value: -n(d.editor_video), kind: "out" },
+    { label: "(−) Outros Gastos com Marketing", value: -n(d.outros_marketing), kind: "out" },
+    { label: "Total Desp. Comerciais/Marketing", value: -n(d.total_despesas_comerciais_marketing), kind: "total" },
+    // 6. Despesas Administrativas
+    { label: "(−) Pró-labore", value: -n(d.pro_labore), kind: "out" },
+    { label: "(−) Contabilidade", value: -n(d.contabilidade), kind: "out" },
+    { label: "(−) BPO Financeiro", value: -n(d.bpo_financeiro), kind: "out" },
+    { label: "(−) Outras Desp. Administrativas", value: -n(d.outras_despesas_administrativas), kind: "out" },
+    { label: "Total Despesas Administrativas", value: -n(d.total_despesas_administrativas), kind: "total" },
+    // 7. Despesas Financeiras
+    { label: "(−) Juros", value: -n(d.juros), kind: "out" },
+    { label: "(−) Manutenção de Conta", value: -n(d.manutencao_conta), kind: "out" },
+    { label: "(−) Tarifas Bancárias", value: -n(d.tarifas_bancarias), kind: "out" },
+    { label: "(−) Outros Encargos Financeiros", value: -n(d.outros_encargos_financeiros), kind: "out" },
+    { label: "Total Despesas Financeiras", value: -n(d.total_despesas_financeiras), kind: "total" },
+    // 8. Resultado do Período
+    { label: "Lucro / Prejuízo do Período", value: n(d.lucro_prejuizo_periodo), kind: "total" },
   ];
 }
 
 function DreRows({ data }: { data: DreAtual }) {
   const rows = buildRows(data);
-  const bruta = Number(data.receita_bruta);
+  const bruta = Number(data.total_receita_bruta);
   const temReceita = Math.abs(bruta) > 0.01;
   const maxAbs = Math.max(...rows.map((r) => Math.abs(r.value)), 1);
 
   return (
-    <div className="space-y-1">
+    <div className="max-h-96 space-y-1 overflow-y-auto pr-1">
       {rows.map((r) => {
         const pctBruta = temReceita ? (r.value / bruta) * 100 : 0;
         const width = (Math.abs(r.value) / maxAbs) * 100;

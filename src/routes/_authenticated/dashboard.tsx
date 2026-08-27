@@ -62,8 +62,8 @@ function DashboardPage() {
   const resultado = receita - despesa;
   const resultadoAnt = (kpis.data?.receitaAnt ?? 0) - (kpis.data?.despesaAnt ?? 0);
   const margem =
-    dre.data && Number(dre.data.receita_bruta) > 0
-      ? (Number(dre.data.lucro_final) / Number(dre.data.receita_bruta)) * 100
+    dre.data && Number(dre.data.total_receita_bruta) > 0
+      ? (Number(dre.data.lucro_prejuizo_periodo) / Number(dre.data.total_receita_bruta)) * 100
       : null;
 
   return (

@@ -14,10 +14,9 @@ export function RecebimentosDonut({ mes }: { mes: string }) {
   const { data, isLoading } = useDreMes(mes);
   const rows = data
     ? [
-        { name: "Cartão Crédito", value: Number(data.cartao_credito) },
-        { name: "Cartão Débito", value: Number(data.cartao_debito) },
-        { name: "Pix", value: Number(data.pix) },
-        { name: "Boleto", value: Number(data.boleto) },
+        { name: "Receitas de Cartão", value: Number(data.receitas_cartao) },
+        { name: "Receitas de PIX", value: Number(data.receitas_pix) },
+        { name: "Aporte Dra Nara", value: Number(data.aporte_dra_nara) },
       ].filter((r) => r.value > 0)
     : [];
   const total = rows.reduce((s, r) => s + r.value, 0);

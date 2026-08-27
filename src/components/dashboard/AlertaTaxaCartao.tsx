@@ -8,7 +8,7 @@ export const TAXA_CARTAO_LIMITE_PCT = 3;
 export function AlertaTaxaCartao({ mes }: { mes: string }) {
   const { data, isLoading } = useDreMes(mes);
   const taxa = Number(data?.taxas_cartao ?? 0);
-  const vendaCartao = Number(data?.cartao_credito ?? 0) + Number(data?.cartao_debito ?? 0);
+  const vendaCartao = Number(data?.receitas_cartao ?? 0);
   const temVendaCartao = vendaCartao > 0.01;
   const pct = temVendaCartao ? (taxa / vendaCartao) * 100 : 0;
   const alto = temVendaCartao && pct > TAXA_CARTAO_LIMITE_PCT;

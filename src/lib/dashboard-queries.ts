@@ -128,10 +128,18 @@ export function useConsultaVsRetorno(mes: string) {
 }
 
 export type DreAtual = {
-  cartao_credito: number; cartao_debito: number; pix: number; boleto: number;
-  receita_bruta: number; taxas_cartao: number; impostos: number; receita_liquida: number;
-  despesas_operacionais: number; despesas_administrativas: number; resultado_operacional: number;
-  despesas_financeiras: number; lucro_liquido: number; retirada_lucro: number; lucro_final: number;
+  receitas_cartao: number; receitas_pix: number; aporte_dra_nara: number; total_receita_bruta: number;
+  taxas_cartao: number; impostos: number; devolucoes_cancelamento: number; outras_deducoes: number;
+  total_deducoes_receita: number; receita_liquida: number;
+  uber: number; aluguel: number; gasolina: number; secretarias_ia: number;
+  outros_despesas_operacionais: number; total_despesas_operacionais: number;
+  canva: number; google_ads: number; editor_video: number; outros_marketing: number;
+  total_despesas_comerciais_marketing: number;
+  pro_labore: number; contabilidade: number; bpo_financeiro: number; outras_despesas_administrativas: number;
+  total_despesas_administrativas: number;
+  juros: number; manutencao_conta: number; tarifas_bancarias: number; outros_encargos_financeiros: number;
+  total_despesas_financeiras: number;
+  lucro_prejuizo_periodo: number;
   atualizado_em: string;
 };
 
@@ -179,10 +187,14 @@ export function useDreMes(mes: string) {
 export type DreAno = DreAtual & { mesesFechados: number; mesAtualIncluido: boolean };
 
 const DRE_CAMPOS = [
-  "cartao_credito", "cartao_debito", "pix", "boleto",
-  "receita_bruta", "taxas_cartao", "impostos", "receita_liquida",
-  "despesas_operacionais", "despesas_administrativas", "resultado_operacional",
-  "despesas_financeiras", "lucro_liquido", "retirada_lucro", "lucro_final",
+  "receitas_cartao", "receitas_pix", "aporte_dra_nara", "total_receita_bruta",
+  "taxas_cartao", "impostos", "devolucoes_cancelamento", "outras_deducoes", "total_deducoes_receita",
+  "receita_liquida",
+  "uber", "aluguel", "gasolina", "secretarias_ia", "outros_despesas_operacionais", "total_despesas_operacionais",
+  "canva", "google_ads", "editor_video", "outros_marketing", "total_despesas_comerciais_marketing",
+  "pro_labore", "contabilidade", "bpo_financeiro", "outras_despesas_administrativas", "total_despesas_administrativas",
+  "juros", "manutencao_conta", "tarifas_bancarias", "outros_encargos_financeiros", "total_despesas_financeiras",
+  "lucro_prejuizo_periodo",
 ] as const;
 
 export function useDreAno(ano: string) {
