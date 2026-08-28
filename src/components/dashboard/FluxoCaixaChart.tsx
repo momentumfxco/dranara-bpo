@@ -31,7 +31,7 @@ export function FluxoCaixaChart({ mesAte }: { mesAte: string }) {
               />
               <Legend wrapperStyle={{ fontSize: 12 }} iconType="circle" />
               <Bar dataKey="receita" name="Receita" fill="var(--color-chart-1)" radius={[6, 6, 0, 0]} />
-              <Bar dataKey="despesa" name="Despesa" fill="var(--color-chart-3)" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="despesa" name="Despesa" fill="var(--color-destructive)" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         )}
