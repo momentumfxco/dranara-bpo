@@ -167,6 +167,11 @@ function DashboardPage() {
         {/* Linha 4 */}
         <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
           <RecebimentosDonut mes={mes} />
+          <DespesasDonut mes={mes} />
+        </div>
+
+        {/* Linha 5 */}
+        <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
           <AlertaTaxaCartao mes={mes} />
         </div>
 
