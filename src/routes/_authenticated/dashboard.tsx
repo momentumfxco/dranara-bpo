@@ -22,6 +22,7 @@ import { DreWaterfall } from "@/components/dashboard/DreWaterfall";
 import { ConsultaRetornoDonut } from "@/components/dashboard/ConsultaRetornoDonut";
 import { RecebimentosDonut } from "@/components/dashboard/RecebimentosDonut";
 import { AlertaTaxaCartao } from "@/components/dashboard/AlertaTaxaCartao";
+import { DespesasDonut } from "@/components/dashboard/DespesasDonut";
 
 const searchSchema = z.object({
   mes: fallback(z.string(), currentMonth()).default(currentMonth()),
@@ -166,6 +167,11 @@ function DashboardPage() {
         {/* Linha 4 */}
         <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
           <RecebimentosDonut mes={mes} />
+          <DespesasDonut mes={mes} />
+        </div>
+
+        {/* Linha 5 */}
+        <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
           <AlertaTaxaCartao mes={mes} />
         </div>
 
