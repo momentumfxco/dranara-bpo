@@ -22,6 +22,7 @@ import { DreWaterfall } from "@/components/dashboard/DreWaterfall";
 import { ConsultaRetornoDonut } from "@/components/dashboard/ConsultaRetornoDonut";
 import { RecebimentosDonut } from "@/components/dashboard/RecebimentosDonut";
 import { AlertaTaxaCartao } from "@/components/dashboard/AlertaTaxaCartao";
+import { DespesasDonut } from "@/components/dashboard/DespesasDonut";
 
 const searchSchema = z.object({
   mes: fallback(z.string(), currentMonth()).default(currentMonth()),
