@@ -74,8 +74,8 @@ const SECTIONS: Section[] = [
     color: "var(--color-chart-1)",
     sign: -1,
     details: [
-      { label: "Canva", field: "canva" },
-      { label: "Google Ads", field: "google_ads" },
+      { label: "Ferramentas de Marketing", field: "ferramentas_marketing" },
+      { label: "Anúncios Online", field: "anuncios_online" },
       { label: "Editor de Vídeo", field: "editor_video" },
       { label: "Outros Gastos com Marketing", field: "outros_marketing" },
     ],
@@ -91,6 +91,7 @@ const SECTIONS: Section[] = [
       { label: "Contabilidade", field: "contabilidade" },
       { label: "BPO Financeiro", field: "bpo_financeiro" },
       { label: "Outras Desp. Administrativas", field: "outras_despesas_administrativas" },
+      { label: "Gastos Pessoais da Sócia", field: "gastos_pessoais_socia" },
     ],
   },
   {
