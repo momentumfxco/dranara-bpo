@@ -249,7 +249,7 @@ function DreRows({
             {expanded &&
               s.details.map((d) => {
                 const dSign = d.sign ?? s.sign;
-                const dv = dSign === -1 ? -Math.abs(n(data, d.field)) : n(data, d.field);
+                const dv = dSign === -1 ? -n(data, d.field) : n(data, d.field);
                 return (
                   <ValueRow
                     key={d.field}
