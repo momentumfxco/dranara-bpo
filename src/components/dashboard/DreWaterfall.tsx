@@ -249,11 +249,11 @@ function DreRows({
             {expanded &&
               s.details.map((d) => {
                 const dSign = d.sign ?? s.sign;
-                const dv = dSign === -1 ? -Math.abs(n(data, d.field)) : n(data, d.field);
+                const dv = dSign === -1 ? -n(data, d.field) : n(data, d.field);
                 return (
                   <ValueRow
                     key={d.field}
-                    label={dSign === -1 ? `(−) ${d.label}` : d.label}
+                    label={dv < 0 ? `(−) ${d.label}` : dv > 0 && dSign === -1 ? `(+) ${d.label}` : d.label}
                     value={dv}
                     pct={temReceita ? `${((dv / bruta) * 100).toFixed(1)}%` : "—"}
                     width={(Math.abs(dv) / maxAbs) * 100}
