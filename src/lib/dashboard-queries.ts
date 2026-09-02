@@ -128,7 +128,8 @@ export function useConsultaVsRetorno(mes: string) {
 }
 
 export type DreAtual = {
-  receitas_cartao: number; receitas_pix: number; aporte_dra_nara: number; total_receita_bruta: number;
+  receitas_cartao: number; receitas_pix: number; receitas_antecipadas: number; outras_receitas: number;
+  aporte_dra_nara: number; total_receita_bruta: number;
   taxas_cartao: number; impostos: number; devolucoes_cancelamento: number; outras_deducoes: number;
   total_deducoes_receita: number; receita_liquida: number;
   uber: number; aluguel: number; gasolina: number; secretarias_ia: number;
@@ -139,6 +140,7 @@ export type DreAtual = {
   total_despesas_administrativas: number;
   juros: number; manutencao_conta: number; tarifas_bancarias: number; outros_encargos_financeiros: number;
   total_despesas_financeiras: number;
+  resultado_do_mes: number; antecipacao_lucro: number;
   lucro_prejuizo_periodo: number;
   atualizado_em: string;
 };
@@ -187,13 +189,14 @@ export function useDreMes(mes: string) {
 export type DreAno = DreAtual & { mesesFechados: number; mesAtualIncluido: boolean };
 
 const DRE_CAMPOS = [
-  "receitas_cartao", "receitas_pix", "aporte_dra_nara", "total_receita_bruta",
+  "receitas_cartao", "receitas_pix", "receitas_antecipadas", "outras_receitas", "aporte_dra_nara", "total_receita_bruta",
   "taxas_cartao", "impostos", "devolucoes_cancelamento", "outras_deducoes", "total_deducoes_receita",
   "receita_liquida",
   "uber", "aluguel", "gasolina", "secretarias_ia", "outros_despesas_operacionais", "total_despesas_operacionais",
   "canva", "google_ads", "editor_video", "outros_marketing", "total_despesas_comerciais_marketing",
   "pro_labore", "contabilidade", "bpo_financeiro", "outras_despesas_administrativas", "total_despesas_administrativas",
   "juros", "manutencao_conta", "tarifas_bancarias", "outros_encargos_financeiros", "total_despesas_financeiras",
+  "resultado_do_mes", "antecipacao_lucro",
   "lucro_prejuizo_periodo",
 ] as const;
 

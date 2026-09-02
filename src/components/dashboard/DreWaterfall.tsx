@@ -14,7 +14,7 @@ type Section = {
   tip: string;
   color: string;
   sign: 1 | -1;
-  details: { label: string; field: Field }[];
+  details: { label: string; field: Field; sign?: 1 | -1 }[];
 };
 
 const SECTIONS: Section[] = [
@@ -27,6 +27,8 @@ const SECTIONS: Section[] = [
     details: [
       { label: "Receitas de Cartão", field: "receitas_cartao" },
       { label: "Receitas de PIX", field: "receitas_pix" },
+      { label: "Receitas Antecipadas", field: "receitas_antecipadas" },
+      { label: "Outras Receitas", field: "outras_receitas" },
       { label: "Aporte Dra Nara", field: "aporte_dra_nara" },
     ],
   },
@@ -107,10 +109,13 @@ const SECTIONS: Section[] = [
   {
     totalField: "lucro_prejuizo_periodo",
     totalLabel: "Lucro / Prejuízo do Período",
-    tip: "O resultado final: o que sobrou (ou faltou) depois de todas as despesas.",
+    tip: "O resultado final: o que sobrou (ou faltou) depois de todas as despesas e da antecipação de lucro retirada pela Dra Nara.",
     color: "var(--color-primary)",
     sign: 1,
-    details: [],
+    details: [
+      { label: "Resultado do Mês", field: "resultado_do_mes", sign: 1 },
+      { label: "Antecipação de Lucro", field: "antecipacao_lucro", sign: -1 },
+    ],
   },
 ];
 
@@ -242,11 +247,12 @@ function DreRows({
             />
             {expanded &&
               s.details.map((d) => {
-                const dv = s.sign === -1 ? -Math.abs(n(data, d.field)) : n(data, d.field);
+                const dSign = d.sign ?? s.sign;
+                const dv = dSign === -1 ? -Math.abs(n(data, d.field)) : n(data, d.field);
                 return (
                   <ValueRow
                     key={d.field}
-                    label={s.sign === -1 ? `(−) ${d.label}` : d.label}
+                    label={dSign === -1 ? `(−) ${d.label}` : d.label}
                     value={dv}
                     pct={temReceita ? `${((dv / bruta) * 100).toFixed(1)}%` : "—"}
                     width={(Math.abs(dv) / maxAbs) * 100}
