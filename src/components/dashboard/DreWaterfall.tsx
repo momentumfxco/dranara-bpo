@@ -253,7 +253,7 @@ function DreRows({
                 return (
                   <ValueRow
                     key={d.field}
-                    label={dSign === -1 ? `(−) ${d.label}` : d.label}
+                    label={dv < 0 ? `(−) ${d.label}` : dv > 0 && dSign === -1 ? `(+) ${d.label}` : d.label}
                     value={dv}
                     pct={temReceita ? `${((dv / bruta) * 100).toFixed(1)}%` : "—"}
                     width={(Math.abs(dv) / maxAbs) * 100}
