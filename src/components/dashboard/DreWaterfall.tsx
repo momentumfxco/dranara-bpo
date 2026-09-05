@@ -6,9 +6,9 @@ import { useDreMes, useDreAno, currentYear, prevMonth, type DreAtual } from "@/l
 import { YearPicker } from "./YearPicker";
 import { TrendBadge } from "./TrendBadge";
 
-type Field = keyof DreAtual;
+export type Field = keyof DreAtual;
 
-type Section = {
+export type Section = {
   totalField: Field;
   totalLabel: string;
   tip: string;
@@ -17,7 +17,7 @@ type Section = {
   details: { label: string; field: Field; sign?: 1 | -1 }[];
 };
 
-const SECTIONS: Section[] = [
+export const SECTIONS: Section[] = [
   {
     totalField: "total_receita_bruta",
     totalLabel: "Total Receita Bruta",
@@ -143,6 +143,7 @@ function ValueRow({
   onToggle,
   expanded,
   hasDetails,
+  active,
 }: {
   label: string;
   value: number;
@@ -155,11 +156,12 @@ function ValueRow({
   onToggle?: () => void;
   expanded?: boolean;
   hasDetails?: boolean;
+  active?: boolean;
 }) {
   return (
     <div
-      className={`grid grid-cols-[minmax(0,1.6fr)_minmax(0,1.4fr)_minmax(0,1fr)_44px_64px] items-center gap-3 rounded-lg px-2 py-1.5 ${
-        isTotal ? "bg-muted/50" : ""
+      className={`grid grid-cols-[minmax(0,1.6fr)_minmax(0,1.4fr)_minmax(0,1fr)_44px_64px] items-center gap-3 rounded-lg px-2 py-1.5 transition-colors ${
+        active ? "bg-primary/10 ring-1 ring-inset ring-primary/30" : isTotal ? "bg-muted/50" : ""
       }`}
     >
       <span className="flex min-w-0 items-center gap-1.5">
@@ -170,11 +172,11 @@ function ValueRow({
             className="inline-flex items-center gap-1 truncate text-left text-xs font-semibold text-foreground"
           >
             {expanded ? (
-              <ChevronDown className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+              <ChevronDown className={`h-3.5 w-3.5 shrink-0 ${active ? "text-primary" : "text-muted-foreground"}`} />
             ) : (
-              <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+              <ChevronRight className={`h-3.5 w-3.5 shrink-0 ${active ? "text-primary" : "text-muted-foreground"}`} />
             )}
-            <span className="truncate">{label}</span>
+            <span className={`truncate ${active ? "text-primary" : ""}`}>{label}</span>
           </button>
         ) : (
           <span
@@ -208,12 +210,15 @@ function DreRows({
   data,
   anterior,
   detalhado,
+  selectedField,
+  onSelectSection,
 }: {
   data: DreAtual;
   anterior: DreAtual | null | undefined;
   detalhado: boolean;
+  selectedField?: Field | null;
+  onSelectSection?: (s: Section) => void;
 }) {
-  const [abertos, setAbertos] = useState<Record<string, boolean>>({});
   const n = (d: DreAtual | null | undefined, f: Field) => Number(d?.[f] ?? 0);
 
   const bruta = n(data, "total_receita_bruta");
@@ -230,7 +235,8 @@ function DreRows({
         const raw = n(data, s.totalField);
         const value = s.sign === -1 ? -Math.abs(raw) : raw;
         const trend = variationPct(raw, n(anterior, s.totalField));
-        const expanded = detalhado || !!abertos[s.totalField];
+        const active = selectedField === s.totalField;
+        const expanded = detalhado || active;
         return (
           <div key={s.totalField} className="space-y-1">
             <ValueRow
@@ -244,7 +250,8 @@ function DreRows({
               trend={trend}
               hasDetails={s.details.length > 0}
               expanded={expanded}
-              onToggle={() => setAbertos((p) => ({ ...p, [s.totalField]: !expanded }))}
+              active={active}
+              onToggle={() => onSelectSection?.(s)}
             />
             {expanded &&
               s.details.map((d) => {
@@ -296,7 +303,15 @@ function PeriodoToggle({
   );
 }
 
-export function DreWaterfall({ mes }: { mes: string }) {
+export function DreWaterfall({
+  mes,
+  selectedField,
+  onSelectSection,
+}: {
+  mes: string;
+  selectedField?: Field | null;
+  onSelectSection?: (s: Section) => void;
+}) {
   const [periodo, setPeriodo] = useState<"mensal" | "anual">("mensal");
   const [ano, setAno] = useState(currentYear());
   const [detalhado, setDetalhado] = useState(false);
@@ -327,7 +342,10 @@ export function DreWaterfall({ mes }: { mes: string }) {
           <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={() => setDetalhado((v) => !v)}
+              onClick={() => {
+                setDetalhado((v) => !v);
+                if (!detalhado && selectedField) onSelectSection?.(SECTIONS.find((s) => s.totalField === selectedField)!);
+              }}
               className="rounded-lg border border-input bg-card px-2.5 py-1 text-xs font-medium text-muted-foreground shadow-card transition hover:text-foreground"
             >
               {detalhado ? "Ocultar detalhes" : "Ver detalhes"}
@@ -347,6 +365,8 @@ export function DreWaterfall({ mes }: { mes: string }) {
           data={data}
           anterior={anterior}
           detalhado={detalhado}
+          selectedField={periodo === "mensal" ? selectedField : null}
+          onSelectSection={periodo === "mensal" ? onSelectSection : undefined}
         />
       )}
     </Card>

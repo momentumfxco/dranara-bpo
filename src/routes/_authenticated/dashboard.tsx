@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
+import { useState } from "react";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -18,7 +19,7 @@ import { YearPicker } from "@/components/dashboard/YearPicker";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { FluxoCaixaChart } from "@/components/dashboard/FluxoCaixaChart";
 import { AtendimentosDiaSemanaChart } from "@/components/dashboard/AtendimentosDiaSemanaChart";
-import { DreWaterfall } from "@/components/dashboard/DreWaterfall";
+import { DreWaterfall, type Section } from "@/components/dashboard/DreWaterfall";
 import { ConsultaRetornoDonut } from "@/components/dashboard/ConsultaRetornoDonut";
 import { RecebimentosDonut } from "@/components/dashboard/RecebimentosDonut";
 import { AlertaTaxaCartao } from "@/components/dashboard/AlertaTaxaCartao";
@@ -50,6 +51,9 @@ function DashboardPage() {
 
   const kpis = useKpisMes(mes);
   const dre = useDreMes(mes);
+  const [dreSection, setDreSection] = useState<Section | null>(null);
+  const toggleDreSection = (s: Section) =>
+    setDreSection((prev) => (prev?.totalField === s.totalField ? null : s));
 
   async function handleLogout() {
     await queryClient.cancelQueries();
@@ -160,8 +164,8 @@ function DashboardPage() {
 
         {/* Linha 3 */}
         <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <DreWaterfall mes={mes} />
-          <ConsultaRetornoDonut mes={mes} />
+          <DreWaterfall mes={mes} selectedField={dreSection?.totalField} onSelectSection={toggleDreSection} />
+          <ConsultaRetornoDonut mes={mes} detailSection={dreSection} onCloseDetail={() => setDreSection(null)} />
         </div>
 
         {/* Linha 4 */}
