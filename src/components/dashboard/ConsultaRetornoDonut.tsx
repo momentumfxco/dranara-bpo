@@ -22,12 +22,12 @@ export function ConsultaRetornoDonut({
   const showDetail = !!detailSection;
 
   return (
-    <Card className="overflow-hidden">
+    <Card className="flex h-full flex-col overflow-hidden">
       {!showDetail && <CardHeader title="Consulta x Retorno" subtitle="Composição de atendimentos do mês" />}
-      <div className="relative h-72">
+      <div className="relative min-h-72 flex-1">
         <div
           className={`absolute inset-0 flex items-center gap-4 transition-all duration-300 ease-out ${
-            showDetail ? "translate-x-6 scale-[.97] opacity-0" : "translate-x-0 scale-100 opacity-100"
+            showDetail ? "translate-y-4 scale-[.97] opacity-0" : "translate-y-0 scale-100 opacity-100"
           }`}
         >
           <div className="relative h-full w-1/2">
