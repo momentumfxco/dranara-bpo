@@ -236,7 +236,7 @@ function DreRows({
         const value = s.sign === -1 ? -Math.abs(raw) : raw;
         const trend = variationPct(raw, n(anterior, s.totalField));
         const active = selectedField === s.totalField;
-        const expanded = detalhado || active;
+        const expanded = detalhado;
         return (
           <div key={s.totalField} className="space-y-1">
             <ValueRow
@@ -249,7 +249,7 @@ function DreRows({
               tip={s.tip}
               trend={trend}
               hasDetails={s.details.length > 0}
-              expanded={expanded}
+              expanded={expanded || active}
               active={active}
               onToggle={() => onSelectSection?.(s)}
             />
