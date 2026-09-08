@@ -15,6 +15,10 @@ export type Section = {
   color: string;
   sign: 1 | -1;
   details: { label: string; field: Field; sign?: 1 | -1 }[];
+  // Quando presente, o card de detalhe busca o detalhamento por subcategoria
+  // ao vivo (tabela dre_subcategorias_atual/historico) em vez de usar `details`
+  // acima. Precisa bater com o valor gravado em categoria_pai pelo workflow 7/11.
+  categoriaPai?: string;
 };
 
 export const SECTIONS: Section[] = [
@@ -38,6 +42,7 @@ export const SECTIONS: Section[] = [
     tip: "Valores que saem direto da receita: taxas de cartão, impostos e devoluções.",
     color: "var(--color-success)",
     sign: -1,
+    categoriaPai: "Deduções",
     details: [
       { label: "Taxas de Cartão", field: "taxas_cartao" },
       { label: "Impostos", field: "impostos" },
@@ -59,6 +64,7 @@ export const SECTIONS: Section[] = [
     tip: "Custos para o consultório funcionar no dia a dia (aluguel, transporte, equipe).",
     color: "var(--color-chart-3)",
     sign: -1,
+    categoriaPai: "Despesas Operacionais",
     details: [
       { label: "Uber", field: "uber" },
       { label: "Aluguel", field: "aluguel" },
@@ -73,6 +79,7 @@ export const SECTIONS: Section[] = [
     tip: "Gastos para atrair pacientes: anúncios, mídia e produção de conteúdo.",
     color: "var(--color-chart-1)",
     sign: -1,
+    categoriaPai: "Despesas Comerciais/Marketing",
     details: [
       { label: "Ferramentas de Marketing", field: "ferramentas_marketing" },
       { label: "Anúncios Online", field: "anuncios_online" },
@@ -86,6 +93,7 @@ export const SECTIONS: Section[] = [
     tip: "Gastos de gestão do negócio: pró-labore, contabilidade e BPO.",
     color: "var(--color-warning)",
     sign: -1,
+    categoriaPai: "Despesas Administrativas",
     details: [
       { label: "Pró-labore", field: "pro_labore" },
       { label: "Contabilidade", field: "contabilidade" },
@@ -100,6 +108,7 @@ export const SECTIONS: Section[] = [
     tip: "Custos do dinheiro: juros, tarifas do banco e encargos.",
     color: "var(--color-destructive)",
     sign: -1,
+    categoriaPai: "Despesas Financeiras",
     details: [
       { label: "Juros", field: "juros" },
       { label: "Manutenção de Conta", field: "manutencao_conta" },

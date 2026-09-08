@@ -202,6 +202,39 @@ const DRE_CAMPOS = [
   "lucro_prejuizo_periodo",
 ] as const;
 
+// Detalhamento por subcategoria de um item da DRE (ex: dentro de "Despesas
+// Operacionais": Aluguel, Supermercado, Telefone...). Mes fechado le de
+// dre_subcategorias_historico; mes corrente le de dre_subcategorias_atual
+// (atualizada todo dia de manha, mesma defasagem que o resto da DRE ao vivo).
+export type DreSubcategoria = { subcategoria: string; valor: number };
+
+export function useDreSubcategorias(mes: string, categoriaPai: string | null | undefined) {
+  return useQuery({
+    queryKey: ["dre-subcategorias", mes, categoriaPai],
+    queryFn: async (): Promise<DreSubcategoria[]> => {
+      if (!categoriaPai) return [];
+      const { data: hist, error: histErr } = await supabase
+        .from("dre_subcategorias_historico")
+        .select("subcategoria, valor")
+        .eq("mes_referencia", monthStart(mes))
+        .eq("categoria_pai", categoriaPai);
+      if (histErr) console.warn("[dre_subcategorias_historico]", histErr.message);
+      if (hist && hist.length > 0) return hist as DreSubcategoria[];
+
+      if (mes === currentMonth()) {
+        const { data, error } = await supabase
+          .from("dre_subcategorias_atual")
+          .select("subcategoria, valor")
+          .eq("categoria_pai", categoriaPai);
+        if (error) throw error;
+        return (data ?? []) as DreSubcategoria[];
+      }
+      return [];
+    },
+    enabled: !!categoriaPai,
+  });
+}
+
 export function useDreAno(ano: string) {
   return useQuery({
     queryKey: ["dre-ano", ano],

@@ -85,6 +85,7 @@ export function ConsultaRetornoDonut({
                 section={detailSection}
                 data={dre.data}
                 bruta={Number(dre.data.total_receita_bruta ?? 0)}
+                mes={mes}
                 onClose={() => onCloseDetail?.()}
               />
             )}

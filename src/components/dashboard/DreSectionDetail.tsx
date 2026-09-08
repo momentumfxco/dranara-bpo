@@ -1,28 +1,37 @@
 import { ArrowLeft } from "lucide-react";
 import { BRL2 } from "@/lib/format";
-import type { DreAtual } from "@/lib/dashboard-queries";
+import { useDreSubcategorias, type DreAtual } from "@/lib/dashboard-queries";
 import type { Field, Section } from "./DreWaterfall";
 
 export function DreSectionDetail({
   section,
   data,
   bruta,
+  mes,
   onClose,
 }: {
   section: Section;
   data: DreAtual;
   bruta: number;
+  mes: string;
   onClose: () => void;
 }) {
   const n = (f: Field) => Number(data?.[f] ?? 0);
   const totalRaw = n(section.totalField);
   const total = section.sign === -1 ? -Math.abs(totalRaw) : totalRaw;
-  const rows = section.details.map((d) => {
-    const sign = d.sign ?? section.sign;
-    const value = sign === -1 ? -n(d.field) : n(d.field);
-    return { label: d.label, value };
-  });
+
+  const subcategorias = useDreSubcategorias(mes, section.categoriaPai);
+  const rows = section.categoriaPai
+    ? (subcategorias.data ?? [])
+        .map((s) => ({ label: s.subcategoria, value: section.sign === -1 ? -Math.abs(s.valor) : s.valor }))
+        .sort((a, b) => Math.abs(b.value) - Math.abs(a.value))
+    : section.details.map((d) => {
+        const sign = d.sign ?? section.sign;
+        const value = sign === -1 ? -n(d.field) : n(d.field);
+        return { label: d.label, value };
+      });
   const maxAbs = Math.max(...rows.map((r) => Math.abs(r.value)), 1);
+  const carregandoSubcategorias = !!section.categoriaPai && subcategorias.isLoading;
 
   return (
     <div className="flex h-full flex-col px-2">
@@ -46,7 +55,13 @@ export function DreSectionDetail({
 
       {rows.length === 0 ? (
         <div className="flex flex-1 items-center justify-center">
-          <p className="text-xs text-muted-foreground">Esse item não tem composição própria — é um resultado calculado.</p>
+          <p className="text-xs text-muted-foreground">
+            {carregandoSubcategorias
+              ? "Carregando…"
+              : section.categoriaPai
+                ? "Nenhum lançamento nesse item ainda esse mês."
+                : "Esse item não tem composição própria — é um resultado calculado."}
+          </p>
         </div>
       ) : (
         <div className="flex flex-1 flex-col justify-center overflow-y-auto">
