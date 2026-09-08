@@ -42,7 +42,6 @@ export const SECTIONS: Section[] = [
     tip: "Valores que saem direto da receita: taxas de cartão, impostos e devoluções.",
     color: "var(--color-success)",
     sign: -1,
-    categoriaPai: "Deduções",
     details: [
       { label: "Taxas de Cartão", field: "taxas_cartao" },
       { label: "Impostos", field: "impostos" },
