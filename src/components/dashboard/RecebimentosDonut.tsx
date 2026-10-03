@@ -11,7 +11,7 @@ const COLORS = [
 ];
 
 export function RecebimentosDonut({ mes }: { mes: string }) {
-  const { data, isLoading } = useDreMes(mes);
+  const { data, isLoading, isError } = useDreMes(mes);
   const rows = data
     ? [
         { name: "Receitas de Cartão", value: Number(data.receitas_cartao) },
@@ -66,7 +66,11 @@ export function RecebimentosDonut({ mes }: { mes: string }) {
             );
           })}
           {!rows.length && !isLoading && (
-            <li className="text-xs text-muted-foreground">Sem dados de DRE ainda.</li>
+            <li className="text-xs text-muted-foreground">
+              {isError
+                ? "Não foi possível carregar os dados. Atualize a página ou entre novamente."
+                : "Sem dados de DRE ainda."}
+            </li>
           )}
         </ul>
       </div>
