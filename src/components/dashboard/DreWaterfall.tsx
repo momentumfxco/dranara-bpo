@@ -330,6 +330,7 @@ export function DreWaterfall({
   const anualAnterior = useDreAno(String(Number(ano) - 1));
 
   const isLoading = periodo === "mensal" ? mensal.isLoading : anual.isLoading;
+  const isError = periodo === "mensal" ? mensal.isError : anual.isError;
   const data = periodo === "mensal" ? mensal.data : anual.data;
   const anterior = periodo === "mensal" ? mensalAnterior.data : anualAnterior.data;
   const subtitle =
@@ -365,7 +366,11 @@ export function DreWaterfall({
       />
       {isLoading || !data ? (
         <div className="flex h-72 items-center justify-center text-xs text-muted-foreground">
-          {isLoading ? "Carregando…" : "Sem dados de DRE ainda."}
+          {isLoading
+            ? "Carregando…"
+            : isError
+              ? "Não foi possível carregar os dados. Atualize a página ou entre novamente."
+              : "Sem dados de DRE ainda."}
         </div>
       ) : (
         <DreRows
