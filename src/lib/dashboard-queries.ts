@@ -147,6 +147,20 @@ export type DreAtual = {
   atualizado_em: string;
 };
 
+// Mes em aberto da contabilidade: o fechamento mensal e manual, entao o mes aberto nem sempre e o do calendario
+// (ex.: em 1-15/out, setembro ainda esta aberto). Aqui ele e o mes seguinte ao ultimo mes fechado em dre_historico.
+// Sem nenhum mes fechado, usa o mes do calendario.
+export async function fetchMesEmAberto(): Promise<string> {
+  const { data, error } = await supabase
+    .from("dre_historico")
+    .select("mes_referencia")
+    .order("mes_referencia", { ascending: false })
+    .limit(1);
+  if (error || !data || data.length === 0) return currentMonth();
+  const [y, m] = String(data[0].mes_referencia).slice(0, 7).split("-").map(Number);
+  return m === 12 ? `${y + 1}-01` : `${y}-${String(m + 1).padStart(2, "0")}`;
+}
+
 export function useDreAtual() {
   return useQuery({
     queryKey: ["dre-atual"],
@@ -159,7 +173,7 @@ export function useDreAtual() {
 }
 
 // DRE do mês selecionado: usa dre_historico se o mês estiver fechado,
-// senão cai para dre_atual (snapshot ao vivo do mês corrente).
+// senão cai para dre_atual (snapshot ao vivo do mês em aberto).
 export function useDreMes(mes: string) {
   return useQuery({
     queryKey: ["dre-mes", mes],
@@ -175,7 +189,7 @@ export function useDreMes(mes: string) {
       }
       if (hist) return hist as unknown as DreAtual;
 
-      if (mes === currentMonth()) {
+      if (mes === (await fetchMesEmAberto())) {
         const { data, error } = await supabase.from("dre_atual").select("*").eq("id", 1).maybeSingle();
         if (error) throw error;
         return (data as DreAtual) ?? null;
@@ -221,7 +235,7 @@ export function useDreSubcategorias(mes: string, categoriaPai: string | null | u
       if (histErr) console.warn("[dre_subcategorias_historico]", histErr.message);
       if (hist && hist.length > 0) return hist as DreSubcategoria[];
 
-      if (mes === currentMonth()) {
+      if (mes === (await fetchMesEmAberto())) {
         const { data, error } = await supabase
           .from("dre_subcategorias_atual")
           .select("subcategoria, valor")
@@ -251,8 +265,9 @@ export function useDreAno(ano: string) {
 
       let mesAtualIncluido = false;
       let atual: DreAtual | null = null;
-      if (ano === currentYear()) {
-        const jaFechado = linhas.some((l) => String(l.mes_referencia).slice(0, 7) === currentMonth());
+      const mesAberto = await fetchMesEmAberto();
+      if (ano === mesAberto.slice(0, 4)) {
+        const jaFechado = linhas.some((l) => String(l.mes_referencia).slice(0, 7) === mesAberto);
         if (!jaFechado) {
           const { data } = await supabase.from("dre_atual").select("*").eq("id", 1).maybeSingle();
           if (data) {
