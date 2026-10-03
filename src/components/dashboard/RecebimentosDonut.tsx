@@ -8,15 +8,18 @@ const COLORS = [
   "var(--color-chart-2)",
   "var(--color-chart-3)",
   "var(--color-chart-4)",
+  "var(--color-chart-5)",
 ];
 
 export function RecebimentosDonut({ mes }: { mes: string }) {
   const { data, isLoading, isError } = useDreMes(mes);
   const rows = data
     ? [
-        { name: "Receitas de Cartão", value: Number(data.receitas_cartao) },
-        { name: "Receitas de PIX", value: Number(data.receitas_pix) },
-        { name: "Aporte Dra Nara", value: Number(data.aporte_dra_nara) },
+        { name: "Receitas de Cartão", value: Number(data.receitas_cartao) || 0 },
+        { name: "Receitas de PIX", value: Number(data.receitas_pix) || 0 },
+        { name: "Receitas Antecipadas", value: Number(data.receitas_antecipadas) || 0 },
+        { name: "Outras Receitas", value: Number(data.outras_receitas) || 0 },
+        { name: "Aporte Dra Nara", value: Number(data.aporte_dra_nara) || 0 },
       ].filter((r) => r.value > 0)
     : [];
   const total = rows.reduce((s, r) => s + r.value, 0);
